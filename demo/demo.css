@@ -1,0 +1,50 @@
+/* http://www.colourlovers.com/palette/89464/YTMND.com */
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background-color: #FAFAED;
+  margin: 50px;
+  text-align: center;
+}
+
+body.dragging,
+body.dragging * {
+  cursor: none !important;
+}
+
+.draggable {
+  background-color: #D8D8C0;
+  border-radius: 50%;
+  cursor: move;
+  display: inline-block;
+  height: 40px;
+  width: 40px;
+}
+
+.drag-icon {
+  background-color: #FF4916;
+  border-radius: 50%;
+  height: 16px;
+  pointer-events: none;
+  width: 16px;
+}
+
+.dropzone {
+  border: 4px solid #D8D8C0;
+  border-radius: 50%;
+  bottom: 50px;
+  height: 70px;
+  left: 50%;
+  margin-left: -35px;
+  position: absolute;
+  width: 70px;
+
+  transition: border-color 750ms;
+}
+
+.dropzone.drag-target {
+  border-color: #FF4916;
+}
