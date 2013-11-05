@@ -57,6 +57,7 @@
   DD.prototype.set_initial_state_object = function() {
     this.state = {
       dragging: false,
+      dragging_origin: false,
       start_coordinates: false
     };
   };
@@ -66,6 +67,8 @@
   DD.prototype.start_drag = function(mouse_event) {
     this.state.dragging = true;
     this.show_drag_icon(mouse_event.pageX, mouse_event.pageY);
+
+    $(this.state.dragging_origin).trigger("pointerdragstart");
     $("body").addClass("dragging");
   };
 
@@ -73,8 +76,11 @@
 
   DD.prototype.stop_drag = function() {
     $("body").removeClass("dragging");
+    $(this.state.dragging_origin).trigger("pointerdragend");
+
     this.hide_drag_icon();
     this.state.dragging = false;
+    this.state.dragging_origin = false;
   };
 
 
@@ -108,10 +114,11 @@
 
 
   DD.prototype.pointer_down_handler = function(e) {
+    this.state.dragging_origin = e.currentTarget;
+
     e.preventDefault();
     e = e.originalEvent;
 
-    console.log(e);
     this.state.start_coordinates = { x: e.pageX, y: e.pageY };
 
     // document -> pointermove
@@ -119,9 +126,6 @@
 
     // remove pointermove on pointerup
     $(document).one("pointerup", this.pointer_up_handler);
-
-    // cancel selection
-    // this.cancel_selection();
   };
 
 
@@ -148,17 +152,19 @@
       }
 
     }
-
-    // cancel selection
-    // this.cancel_selection();
   };
 
 
   DD.prototype.pointer_up_handler = function(e) {
     $(document).off("pointermove", this.pointer_move_handler);
 
-    //
-    console.log(e.target);
+    // trigger and check parent
+    var trigger_and_check_parent = function(el) {
+      if (el) $(el).trigger("pointerdrop");
+      if (el && el.parentNode) trigger_and_check_parent(el.parentNode);
+    };
+
+    trigger_and_check_parent(e.target);
 
     // stop
     this.stop_drag();
