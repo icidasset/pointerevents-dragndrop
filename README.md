@@ -16,7 +16,7 @@ Drag and drop for pointerevents.
 ## How to use
 
 ```javascript
-var instance = new PointerEventsDragnDrop(element, options);
+var instance = new PointerEventsDragnDrop(element_or_nodelist, options);
 ```
 
 ## Settings
@@ -29,6 +29,7 @@ drag_icon_classname = "drag-icon";
 
 ## To do
 
+- Remove jQuery/Zepto dependency
 - pointerdragenter
 - pointerdragleave
 - pointerdragover
