@@ -11,6 +11,9 @@ Drag and drop for pointerevents.
 
 - pointerdragstart
 - pointerdragend
+- pointerdragenter
+- pointerdragover
+- pointerdragleave
 - pointerdrop
 
 ## How to use
@@ -30,6 +33,3 @@ drag_icon_classname = "drag-icon";
 ## To do
 
 - Remove jQuery/Zepto dependency
-- pointerdragenter
-- pointerdragleave
-- pointerdragover

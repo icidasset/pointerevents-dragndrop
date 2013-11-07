@@ -6,8 +6,10 @@ html, body {
 
 body {
   background-color: #FAFAED;
-  margin: 50px;
+  margin: 0;
   text-align: center;
+
+  -webkit-font-smoothing: antialiased;
 }
 
 body.dragging,
@@ -21,6 +23,7 @@ body.dragging * {
   cursor: move;
   display: inline-block;
   height: 40px;
+  margin-top: 50px;
   width: 40px;
 }
 
@@ -38,7 +41,7 @@ body.dragging * {
   bottom: 50px;
   height: 70px;
   left: 50%;
-  margin-left: -35px;
+  margin-left: -39px;
   position: absolute;
   width: 70px;
 
@@ -47,4 +50,18 @@ body.dragging * {
 
 .dropzone.drag-target {
   border-color: #FF4916;
+}
+
+.not-a-dropzone {
+  border: 2px solid #D8D8C0;
+  color: #A8A890;
+  font-size: 40px;
+  height: 50px;
+  left: 50%;
+  line-height: 54px;
+  margin-left: -27px;
+  margin-top: -27px;
+  position: absolute;
+  top: 50%;
+  width: 50px;
 }

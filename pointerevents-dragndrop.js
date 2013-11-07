@@ -58,29 +58,39 @@
     this.state = {
       dragging: false,
       dragging_origin: false,
-      start_coordinates: false
+      start_coordinates: false,
+      last_toElement: false
     };
   };
 
 
 
-  DD.prototype.start_drag = function(mouse_event) {
+  DD.prototype.start_drag = function(pointer_event) {
     this.state.dragging = true;
-    this.show_drag_icon(mouse_event.pageX, mouse_event.pageY);
 
+    // show drag icon
+    this.show_drag_icon(pointer_event.pageX, pointer_event.pageY);
+
+    // trigger + add class to body
     $(this.state.dragging_origin).trigger("pointerdragstart");
     $("body").addClass("dragging");
   };
 
 
 
-  DD.prototype.stop_drag = function() {
+  DD.prototype.stop_drag = function(pointer_event) {
     $("body").removeClass("dragging");
+
+    // trigger
     $(this.state.dragging_origin).trigger("pointerdragend");
 
+    // hide drag icon
     this.hide_drag_icon();
+
+    // reset state
     this.state.dragging = false;
     this.state.dragging_origin = false;
+    this.state.last_toElement = false;
   };
 
 
@@ -137,6 +147,7 @@
 
     if (this.state.dragging) {
       this.move_drag_icon(e.pageX, e.pageY);
+      this.trigger_additional_drag_events(e);
 
     } else {
       start = this.state.start_coordinates;
@@ -158,7 +169,10 @@
   DD.prototype.pointer_up_handler = function(e) {
     $(document).off("pointermove", this.pointer_move_handler);
 
-    // trigger and check parent
+    e.preventDefault();
+    e = e.originalEvent;
+
+    // trigger drop event and do the same for all parents
     var trigger_and_check_parent = function(el) {
       if (el) $(el).trigger("pointerdrop");
       if (el && el.parentNode) trigger_and_check_parent(el.parentNode);
@@ -167,12 +181,34 @@
     trigger_and_check_parent(e.target);
 
     // stop
-    this.stop_drag();
+    this.stop_drag(e);
   };
 
 
   DD.prototype.prevent_default = function(e) {
     e.preventDefault();
+  };
+
+
+  DD.prototype.trigger_additional_drag_events = function(e) {
+    var last_toElement_is_node = (
+      this.state.last_toElement &&
+      this.state.last_toElement.nodeType
+    );
+
+    if (last_toElement_is_node && (this.state.last_toElement !== e.toElement)) {
+      $(this.state.last_toElement).trigger("pointerdragleave");
+      $(e.target).trigger("pointerdragenter");
+
+    } else if (last_toElement_is_node && (this.state.last_toElement === e.toElement)) {
+      $(this.state.last_toElement).trigger("pointerdragover");
+
+    } else {
+      $(e.target).trigger("pointerdragenter");
+
+    }
+
+    this.state.last_toElement = e.target;
   };
 
 
@@ -223,9 +259,9 @@
 
   DD.prototype.cancel_selection = function() {
     if (window.getSelection) {
-        window.getSelection().removeAllRanges();
+      window.getSelection().removeAllRanges();
     } else if (document.selection) {
-        document.selection.empty();
+      document.selection.empty();
     }
   };
 
