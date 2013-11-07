@@ -48,7 +48,8 @@
       "pointer_down_handler",
       "pointer_move_handler",
       "pointer_up_handler",
-      "prevent_default"
+      "prevent_default",
+      "document_pointerout_handler"
     ]);
 
     // setup
@@ -80,12 +81,18 @@
 
     // trigger + add class to body
     $(this.state.dragging_origin).trigger("pointerdragstart");
+
+    // body class
     $("body").addClass("dragging");
   };
 
 
 
   DD.prototype.stop_drag = function(pointer_event) {
+    $(document).off("pointermove", this.pointer_move_handler);
+    $(document).off("pointerup", this.pointer_up_handler);
+
+    // body class
     $("body").removeClass("dragging");
 
     // trigger
@@ -127,6 +134,9 @@
     for (i=0; i<j; ++i) {
       this.$el.on.apply(this.$el, events[i]);
     }
+
+    // special events
+    $(document).on("pointerout", this.document_pointerout_handler);
   };
 
 
@@ -134,7 +144,7 @@
     this.state.dragging_origin = e.currentTarget;
 
     e.preventDefault();
-    if (e.originalEvent) e = e.originalEvent;
+    e = e.originalEvent || e;
 
     this.state.start_coordinates = { x: e.pageX, y: e.pageY };
 
@@ -150,7 +160,7 @@
     var start, now, diff;
 
     e.preventDefault();
-    if (e.originalEvent) e = e.originalEvent;
+    e = e.originalEvent || e;
 
     if (this.state.dragging) {
       this.move_drag_icon(e.pageX, e.pageY);
@@ -174,18 +184,11 @@
 
 
   DD.prototype.pointer_up_handler = function(e) {
-    $(document).off("pointermove", this.pointer_move_handler);
-
     e.preventDefault();
-    if (e.originalEvent) e = e.originalEvent;
+    e = e.originalEvent || e;
 
-    // trigger drop event and do the same for all parents
-    var trigger_and_check_parent = function(el) {
-      if (el) $(el).trigger("pointerdrop");
-      if (el && el.parentNode) trigger_and_check_parent(el.parentNode);
-    };
-
-    trigger_and_check_parent(e.target);
+    // trigger drop event
+    $(e.target).trigger("pointerdrop");
 
     // stop
     this.stop_drag(e);
@@ -216,6 +219,15 @@
     }
 
     this.state.last_toElement = e.target;
+  };
+
+
+  DD.prototype.document_pointerout_handler = function(e) {
+    e = e.originalEvent || e;
+
+    if (e.relatedTarget === null || e.relatedTarget.tagName.toLowerCase() === "html") {
+      this.stop_drag();
+    }
   };
 
 
