@@ -19,8 +19,8 @@ Drag and drop for pointerevents.
 ## How to use
 
 ```javascript
-var element_or_nodelist = $("[draggable]");
-var instance = new PointerEventsDragnDrop(element_or_nodelist, options);
+var element_or_$elements = $("[draggable]");
+var instance = new PointerEventsDragnDrop(element_or_$elements, options);
 
 $(".drop-zone").on("pointerdrop", function() {
   alert("Dropped it!");
