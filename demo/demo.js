@@ -1,5 +1,5 @@
 $(function() {
-  var draggable = $(".draggable");
+  var $draggable = $(".draggable");
 
   // alternative:
   //
@@ -9,10 +9,10 @@ $(function() {
   //   }
   // );
 
-  var p = new PointerEventsDragnDrop(draggable);
+  var p = new PointerEventsDragnDrop($draggable);
 
   // dragstart
-  $(".draggable").on("pointerdragstart", function(e) {
+  $draggable.on("pointerdragstart", function(e) {
     console.log("pointerdragstart", e);
   });
 
@@ -32,7 +32,7 @@ $(function() {
   });
 
   // dragend
-  $(".draggable").on("pointerdragend", function(e) {
+  $draggable.on("pointerdragend", function(e) {
     console.log("pointerdragend", e);
   });
 

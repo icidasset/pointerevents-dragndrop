@@ -27,6 +27,8 @@ $(".drop-zone").on("pointerdrop", function() {
 });
 ```
 
+Check [the demo](./blob/master/demo/demo.js) for a better example.
+
 ## Settings
 
 ```javascript
