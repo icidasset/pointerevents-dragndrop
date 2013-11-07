@@ -27,7 +27,7 @@ $(".drop-zone").on("pointerdrop", function() {
 });
 ```
 
-Check [the demo](./blob/master/demo/demo.js) for a better example.
+Check [the demo](https://github.com/icidasset/pointerevents-dragndrop/tree/master/demo/demo.js) for a better example.
 
 ## Settings
 
