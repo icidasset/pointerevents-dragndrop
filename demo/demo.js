@@ -1,5 +1,5 @@
 $(function() {
-  var draggable = document.querySelectorAll(".draggable");
+  var draggable = $(".draggable");
 
   // alternative:
   //

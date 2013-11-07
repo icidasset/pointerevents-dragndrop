@@ -28,9 +28,16 @@
   //
   //  Constructor
   //
-  function DD(el, settings) {
-    this.el = el;
-    this.$el = $(el);
+  function DD(element, settings) {
+    this.$el = (function() {
+      if (element instanceof $) {
+        return element;
+      } else if ($.isArray(element)) {
+        return element;
+      } else {
+        return $(element);
+      }
+    })();
 
     // settings
     this.settings = {};
@@ -127,7 +134,7 @@
     this.state.dragging_origin = e.currentTarget;
 
     e.preventDefault();
-    e = e.originalEvent;
+    if (e.originalEvent) e = e.originalEvent;
 
     this.state.start_coordinates = { x: e.pageX, y: e.pageY };
 
@@ -143,7 +150,7 @@
     var start, now, diff;
 
     e.preventDefault();
-    e = e.originalEvent;
+    if (e.originalEvent) e = e.originalEvent;
 
     if (this.state.dragging) {
       this.move_drag_icon(e.pageX, e.pageY);
@@ -170,7 +177,7 @@
     $(document).off("pointermove", this.pointer_move_handler);
 
     e.preventDefault();
-    e = e.originalEvent;
+    if (e.originalEvent) e = e.originalEvent;
 
     // trigger drop event and do the same for all parents
     var trigger_and_check_parent = function(el) {
@@ -273,4 +280,4 @@
   window.PointerEventsDragnDrop = DD;
 
 
-})(jQuery || Zepto);
+})(window.jQuery || window.Zepto);
