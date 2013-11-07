@@ -19,7 +19,12 @@ Drag and drop for pointerevents.
 ## How to use
 
 ```javascript
+var element_or_nodelist = $("[draggable]");
 var instance = new PointerEventsDragnDrop(element_or_nodelist, options);
+
+$(".drop-zone").on("pointerdrop", function() {
+  alert("Dropped it!");
+});
 ```
 
 ## Settings
@@ -33,3 +38,4 @@ drag_icon_classname = "drag-icon";
 ## To do
 
 - Remove jQuery/Zepto dependency
+- Them' bubbles
