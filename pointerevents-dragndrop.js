@@ -67,7 +67,8 @@
       dragging: false,
       dragging_origin: false,
       start_coordinates: false,
-      last_toElement: false
+      last_toElement: false,
+      pointers: {}
     };
   };
 
@@ -146,7 +147,15 @@
     e.preventDefault();
     e = e.originalEvent || e;
 
-    this.state.start_coordinates = { x: e.pageX, y: e.pageY };
+    this.state.start_coordinates = {
+      x: e.pageX,
+      y: e.pageY
+    };
+
+    this.state.pointers[e.pointerId.toString()] = {
+      pointerType: e.pointerType,
+      pointerId: e.pointerId
+    };
 
     // document -> pointermove
     $(document).on("pointermove", this.pointer_move_handler);
@@ -186,6 +195,8 @@
   DD.prototype.pointer_up_handler = function(e) {
     e.preventDefault();
     e = e.originalEvent || e;
+
+    delete this.state.pointers[e.pointerId.toString()];
 
     // trigger drop event
     $(e.target).trigger("pointerdrop");
