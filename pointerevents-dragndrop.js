@@ -1,7 +1,7 @@
 /*
 
   Pointerevents - Drag n' Drop
-  v0.1.1
+  v0.1.2
 
 */
 
@@ -150,6 +150,10 @@
   //
   DD.prototype.pointer_down_handler = function(e) {
     var $doc = $(document);
+
+    // dismiss clicks from right or middle mouse buttons
+    var btn = (e.originalEvent || e).button;
+    if (btn && (btn !== 0 && btn !== 1)) return;
 
     // where it all started
     this.state.dragging_origin = e.currentTarget;
